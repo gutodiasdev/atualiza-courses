@@ -22,7 +22,8 @@ export const signInSchema = z.object({
 export default function Page() {
   const router = useRouter();
   const form = useForm<z.infer<typeof signInSchema>>({
-    resolver: zodResolver(signInSchema)
+    resolver: zodResolver(signInSchema),
+    defaultValues: { email: "", password: "" }
   });
 
   const signInMutation = useMutation({

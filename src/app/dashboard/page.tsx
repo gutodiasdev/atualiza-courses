@@ -1,5 +1,9 @@
+import { ContentLayout } from "@/components/dashboard/content-layout";
+
 export default function Page() {
   return (
-    <p>Dashboard page!</p>
-  )
+    <ContentLayout title="Dashboard">
+      <p>Dashboard page!</p>
+    </ContentLayout>
+  );
 }
