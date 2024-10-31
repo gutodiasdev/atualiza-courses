@@ -28,6 +28,20 @@ export async function verifyToken(): Promise<{ user: number, roles: string; }> {
   return data;
 }
 
+export async function getUser(token: string): Promise<{ user: number, roles: string; }> {
+  const { data, status } = await api.get("/me", {
+    method: "GET",
+    headers: {
+      Authorization: "Bearer " + token
+    }
+  });
+  if (status === 401) {
+    throw new Error("Token inválido!");
+  }
+
+  return data;
+}
+
 export async function getSession() {
   const cookiesStorage = await cookies();
   const session = cookiesStorage.get("session")?.value;
@@ -44,7 +58,6 @@ export async function setSession() {
     token,
     {
       expires: expiresInOneHour,
-      httpOnly: true,
       secure: true,
       sameSite: 'lax',
     });
@@ -54,4 +67,10 @@ export async function signOut() {
   const cookiesStorage = await cookies();
   cookiesStorage.delete("session");
   redirect("/");
+}
+
+export async function getToken(): Promise<string | undefined> {
+  const cookiesStorage = await cookies();
+  const token = cookiesStorage.get("session")?.value;
+  return token;
 }

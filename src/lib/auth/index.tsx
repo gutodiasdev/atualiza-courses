@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
 import {
   createContext,
   useContext,
   ReactNode,
-  useState,
-  useEffect,
-} from 'react';
-import { use } from 'react';
+  useState
+} from "react";
+import { api } from "../api";
+import { getCookie } from "cookies-next";
 
 type UserContextType = {
   user: any | null;
@@ -19,24 +19,32 @@ const UserContext = createContext<UserContextType | null>(null);
 export function useUser(): UserContextType {
   const context = useContext(UserContext);
   if (context === null) {
-    throw new Error('useUser must be used within a UserProvider');
+    throw new Error("useUser must be used within a UserProvider");
   }
   return context;
 }
 
 export function UserProvider({
   children,
-  userPromise,
 }: {
   children: ReactNode;
-  userPromise: Promise<any | null>;
 }) {
-  const initialUser = use(userPromise);
-  const [user, setUser] = useState<any | null>(initialUser);
+  const [user, setUser] = useState<any | null>(null);
+  const token = getCookie("session");
 
-  useEffect(() => {
-    setUser(initialUser);
-  }, [initialUser]);
+  if (!user) {
+    api.get("/me", {
+      headers: {
+        Authorization: "Bearer " + token
+      }
+    })
+      .then((response) => {
+        const { data } = response;
+        console.log(data);
+        setUser(data);
+      });
+  }
+
 
   return (
     <UserContext.Provider value={{ user, setUser }}>

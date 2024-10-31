@@ -38,9 +38,10 @@ export function Sidebar() {
             <div className="w-fill flex justify-center items-center">
               <div className={cn("relative", !getOpenState() ? "w-12 h-12" : "w-36 h-20")}>
                 <Image
-                  src="./logo.svg"
+                  src="/logo.svg"
                   alt="AtualizaDigital"
                   fill
+                  priority
                 />
               </div>
             </div>

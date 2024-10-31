@@ -35,10 +35,7 @@ export default function Page() {
       toast.success("Logado com sucesso!", { duration: 2000 });
       router.push("/dashboard");
     },
-    onError: (error: any, variables, context) => {
-      console.log("Error: ", error.response.data.message);
-      console.log("Valiables: ", variables);
-      console.log("Context: ", context);
+    onError: (error: any) => {
       toast.error(error.response.data.message, { duration: 2000 });
     }
   });
