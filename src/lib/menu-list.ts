@@ -1,11 +1,11 @@
 import {
-  Tag,
   Users,
-  Settings,
-  Bookmark,
-  SquarePen,
-  LayoutGrid,
-  LucideIcon
+  Settings, LayoutGrid,
+  LucideIcon,
+  GraduationCap,
+  Handshake,
+  ListTodo,
+  TrendingUp
 } from "lucide-react";
 
 type Submenu = {
@@ -41,46 +41,56 @@ export function getMenuList(pathname: string): Group[] {
       ]
     },
     {
-      groupLabel: "Contents",
+      groupLabel: "Alunos",
       menus: [
         {
-          href: "",
-          label: "Posts",
-          icon: SquarePen,
-          submenus: [
-            {
-              href: pathname + "/posts",
-              label: "All Posts"
-            },
-            {
-              href: pathname + "/posts/new",
-              label: "New Post"
-            }
-          ]
+          href: pathname + "/aulas",
+          label: "Aulas",
+          icon: GraduationCap,
+          submenus: []
         },
         {
-          href: pathname + "/categories",
-          label: "Categories",
-          icon: Bookmark
+          href: pathname + "/consultorias",
+          label: "Consultorias",
+          icon: Handshake,
+          submenus: []
         },
         {
-          href: pathname + "/tags",
-          label: "Tags",
-          icon: Tag
+          href: pathname + "/projetos",
+          label: "Projetos",
+          icon: ListTodo,
+          submenus: []
+        },
+        {
+          href: pathname + "/campanhas",
+          label: "Campanhas",
+          icon: TrendingUp,
+          submenus: []
         }
       ]
     },
     {
-      groupLabel: "Settings",
+      groupLabel: "Professor",
       menus: [
         {
-          href: pathname + "/users",
-          label: "Users",
-          icon: Users
+          href: pathname + "/alunos",
+          label: "Alunos",
+          icon: Users,
+          submenus: []
         },
         {
-          href: pathname + "/account",
-          label: "Account",
+          href: pathname + "/cursos",
+          label: "Cursos",
+          icon: GraduationCap
+        }
+      ]
+    },
+    {
+      groupLabel: "Administrativo",
+      menus: [
+        {
+          href: pathname + "/minha-conta",
+          label: "Minha Conta",
           icon: Settings
         }
       ]

@@ -2,6 +2,7 @@
 
 import { cookies } from "next/headers";
 import { api } from "../api";
+import { redirect } from "next/navigation";
 
 export async function signToken(): Promise<{ token: string; }> {
   const cookiesStorage = await cookies();
@@ -47,4 +48,10 @@ export async function setSession() {
       secure: true,
       sameSite: 'lax',
     });
+}
+
+export async function signOut() {
+  const cookiesStorage = await cookies();
+  cookiesStorage.delete("session");
+  redirect("/");
 }
