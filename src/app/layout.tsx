@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Providers from "./Providers";
+import { UserProvider } from "@/lib/auth";
+import { getUser } from "@/lib/auth/session";
 
 export const metadata: Metadata = {
   title: "AtualizaDigital Courses",
@@ -12,12 +14,16 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const userPromise = getUser();
+
   return (
     <html lang="pt-br" suppressHydrationWarning>
       <body className="antialiased">
-        <Providers>
-          {children}
-        </Providers>
+        <UserProvider userPromise={userPromise}>
+          <Providers>
+            {children}
+          </Providers>
+        </UserProvider>
       </body>
     </html>
   );

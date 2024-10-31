@@ -27,7 +27,7 @@ type Group = {
   menus: Menu[];
 };
 
-export function getMenuList(pathname: string): Group[] {
+export function getMenuList(): Group[] {
   return [
     {
       groupLabel: "",
@@ -44,25 +44,25 @@ export function getMenuList(pathname: string): Group[] {
       groupLabel: "Alunos",
       menus: [
         {
-          href: pathname + "/aulas",
+          href: "/dashboard/aulas",
           label: "Aulas",
           icon: GraduationCap,
           submenus: []
         },
         {
-          href: pathname + "/consultorias",
+          href: "/dashboard/consultorias",
           label: "Consultorias",
           icon: Handshake,
           submenus: []
         },
         {
-          href: pathname + "/projetos",
+          href: "/dashboard/projetos",
           label: "Projetos",
           icon: ListTodo,
           submenus: []
         },
         {
-          href: pathname + "/campanhas",
+          href: "/dashboard/campanhas",
           label: "Campanhas",
           icon: TrendingUp,
           submenus: []
@@ -73,13 +73,13 @@ export function getMenuList(pathname: string): Group[] {
       groupLabel: "Professor",
       menus: [
         {
-          href: pathname + "/alunos",
+          href: "/dashboard/alunos",
           label: "Alunos",
           icon: Users,
           submenus: []
         },
         {
-          href: pathname + "/cursos",
+          href: "/dashboard/cursos",
           label: "Cursos",
           icon: GraduationCap
         }
@@ -89,7 +89,7 @@ export function getMenuList(pathname: string): Group[] {
       groupLabel: "Administrativo",
       menus: [
         {
-          href: pathname + "/minha-conta",
+          href: "/dashboard/minha-conta",
           label: "Minha Conta",
           icon: Settings
         }

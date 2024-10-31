@@ -3,7 +3,6 @@
 import { Sidebar } from "@/components/dashboard/sidebar";
 import { useSidebar } from "@/hooks/use-sidebar";
 import { useStore } from "@/hooks/use-store";
-import { UserProvider } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 
 export default function Layout({
@@ -14,9 +13,9 @@ export default function Layout({
   const sidebar = useStore(useSidebar, (x) => x);
   if (!sidebar) return null;
   const { getOpenState, settings } = sidebar;
-  
+
   return (
-    <UserProvider>
+    <>
       <Sidebar />
       <main
         className={cn(
@@ -26,6 +25,6 @@ export default function Layout({
       >
         {children}
       </main>
-    </UserProvider>
+    </>
   );
 }

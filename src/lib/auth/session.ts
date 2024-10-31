@@ -28,7 +28,13 @@ export async function verifyToken(): Promise<{ user: number, roles: string; }> {
   return data;
 }
 
-export async function getUser(token: string): Promise<{ user: number, roles: string; }> {
+export async function getUser(): Promise<{ user: number, roles: string; } | null> {
+  const cookiesStorage = await cookies();
+  const token = cookiesStorage.get("session")?.value;
+  if (!token) {
+    return null;
+  }
+  
   const { data, status } = await api.get("/me", {
     method: "GET",
     headers: {
@@ -49,9 +55,8 @@ export async function getSession() {
   return await verifyToken();
 }
 
-export async function setSession() {
+export async function setSession(token: string) {
   const expiresInOneHour = new Date(Date.now() + 60 * 60 * 1000);
-  const { token } = await signToken();
   const cookiesStorage = await cookies();
   cookiesStorage.set(
     "session",

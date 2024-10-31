@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { signToken, verifyToken } from "@/lib/auth/session";
+import { verifyToken } from "@/lib/auth/session";
 
 const protectedRoutes = "/dashboard";
 
@@ -17,17 +17,7 @@ export async function middleware(request: NextRequest) {
 
   if (sessionCookie) {
     try {
-      await verifyToken().then(async () => {
-        const { token } = await signToken();
-        const expiresInOneHour = new Date(Date.now() + 60 * 60 * 1000);
-        res.cookies.set({
-          name: "session",
-          value: token,
-          secure: true,
-          sameSite: "lax",
-          expires: expiresInOneHour,
-        });
-      });
+      await verifyToken()
     } catch (error: any) {
       console.error('Error updating session:', error.message);
       res.cookies.delete("session");

@@ -10,6 +10,6 @@ export const signIn = async (data: z.infer<typeof signInSchema>) => {
   }
 
   await Promise.all([
-    setSession(),
+    setSession(response.token),
   ]);
 };
