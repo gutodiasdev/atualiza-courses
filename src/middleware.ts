@@ -23,7 +23,6 @@ export async function middleware(request: NextRequest) {
         res.cookies.set({
           name: "session",
           value: token,
-          httpOnly: true,
           secure: true,
           sameSite: "lax",
           expires: expiresInOneHour,
