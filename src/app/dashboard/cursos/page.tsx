@@ -1,8 +1,8 @@
 "use client";
 
 import { ContentLayout } from "@/components/dashboard/content-layout";
-import { columns } from "@/components/dashboard/students/columns";
-import { DataTable } from "@/components/dashboard/students/data-table";
+import { columns } from "@/components/dashboard/courses/columns";
+import { DataTable } from "@/components/dashboard/courses/data-table";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -10,41 +10,48 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { api } from "@/lib/api";
 import { useUser } from "@/lib/auth";
-import passwordGenerator from "@/lib/security/passwordGenerator";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { CheckCircle, CopyIcon, KeyRound, LoaderCircle, RefreshCcw, UserPlus } from "lucide-react";
-import { useState } from "react";
+import { AxiosError } from "axios";
+import { CheckCircle, GraduationCap, LoaderCircle, RefreshCcw } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
 
 const schema = z.object({
   name: z.string({ message: "Nome do usuário é obrigatório" }),
-  email: z.string().email("Você precisa inserir um email válido"),
-  password: z.string({ message: "Senha é obrigatório" }).min(6, "A senha precisa ter no mínimo 6 caracteres")
+  description: z.string().email("Você precisa inserir um email válido"),
+  image: z.string({ message: "Imagem é obrigatório" })
 });
 
 export default function Page() {
   const { user } = useUser();
+  const router = useRouter();
   const [open, setOpen] = useState<boolean>(false);
 
-  const query = useQuery({
-    queryKey: ["students", user.id],
+  const query = useQuery<any, AxiosError>({
+    queryKey: ["courses", user.id],
     queryFn: async () => {
-      const { data } = await api.get("/clientes/student", {
+      const { data } = await api.get("/courses", {
         authorization: true
       });
       return data;
     },
-    staleTime: 1000 * 60 * 5
+    staleTime: 1000 * 60 * 5,
   });
 
+  useEffect(() => {
+    if (query.error?.status === 401) {
+      router.push("/");
+    }
+  }, [query]);
+
   const mutation = useMutation({
-    mutationKey: ["add_student", user.id],
+    mutationKey: ["add_course", user.id],
     mutationFn: async (values: z.infer<typeof schema>) => {
-      const teacherId = Number(user.id);
-      await api.post("/user", { ...values, role: "student", teacher_id: teacherId }, { authorization: true });
+      await api.post("/course", values, { authorization: true });
     },
     onSuccess: () => {
       toast.success("Aluno adicionado com sucesso!");
@@ -53,6 +60,7 @@ export default function Page() {
     },
     onError: (error: any) => {
       toast.error(error.message);
+
     }
   });
 
@@ -60,8 +68,7 @@ export default function Page() {
     resolver: zodResolver(schema),
     defaultValues: {
       name: "",
-      email: "",
-      password: ""
+      description: ""
     }
   });
 
@@ -69,27 +76,18 @@ export default function Page() {
     await mutation.mutateAsync(values);
   };
 
-  const generatePassword = () => {
-    form.setValue("password", passwordGenerator());
-  };
-
-  const copyToClipboard = async () => {
-    if (form.getValues().password.length === 0) return null;
-    await navigator.clipboard.writeText(form.getValues().password);
-  };
-
   const handleRefetch = () => {
     query.refetch();
   };
 
   return (
-    <ContentLayout title="Alunos">
+    <ContentLayout title="Cursos">
       <section className="flex item-center justify-end gap-x-4">
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
             <Button variant="outline">
-              <UserPlus />
-              Adicionar aluno
+              <GraduationCap />
+              Adicionar curso
             </Button>
           </PopoverTrigger>
           <PopoverContent className="mr-8 min-w-[480px] bg-gray-900">
@@ -100,7 +98,7 @@ export default function Page() {
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Nome do usuário</FormLabel>
+                      <FormLabel>Nome do curso</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -110,10 +108,10 @@ export default function Page() {
                 />
                 <FormField
                   control={form.control}
-                  name="email"
+                  name="description"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email do usuário</FormLabel>
+                      <FormLabel>Descrição do curso</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -121,48 +119,22 @@ export default function Page() {
                     </FormItem>
                   )}
                 />
-                <div className="flex items-end gap-x-2">
-                  <FormField
-                    control={form.control}
-                    name="password"
-                    render={({ field }) => (
-                      <FormItem className="flex-1">
-                        <FormLabel>Senha</FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button size="icon" variant="outline" onClick={generatePassword} type="button">
-                          <KeyRound />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        Gerar senha
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button size="icon" variant="outline" onClick={copyToClipboard} type="button">
-                          <CopyIcon />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        Copiar senha
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </div>
+                <FormField
+                  control={form.control}
+                  name="image"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Imagem do curso</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <Button variant="outline" className="right-0" type="submit">
                   <CheckCircle />
-                  Adicionar aluno
+                  Adicionar curso
                 </Button>
               </form>
             </Form>
