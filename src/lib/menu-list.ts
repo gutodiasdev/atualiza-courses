@@ -3,9 +3,9 @@ import {
   Settings, LayoutGrid,
   LucideIcon,
   GraduationCap,
-  Handshake,
-  ListTodo,
-  TrendingUp
+  // Handshake,
+  // ListTodo,
+  // TrendingUp
 } from "lucide-react";
 
 type Submenu = {
@@ -23,6 +23,7 @@ type Menu = {
 };
 
 type Group = {
+  roles: string[];
   groupLabel: string;
   menus: Menu[];
 };
@@ -30,6 +31,7 @@ type Group = {
 export function getMenuList(): Group[] {
   return [
     {
+      roles: ["admin"],
       groupLabel: "",
       menus: [
         {
@@ -41,6 +43,7 @@ export function getMenuList(): Group[] {
       ]
     },
     {
+      roles: ["student"],
       groupLabel: "Alunos",
       menus: [
         {
@@ -49,27 +52,28 @@ export function getMenuList(): Group[] {
           icon: GraduationCap,
           submenus: []
         },
-        {
-          href: "/dashboard/consultorias",
-          label: "Consultorias",
-          icon: Handshake,
-          submenus: []
-        },
-        {
-          href: "/dashboard/projetos",
-          label: "Projetos",
-          icon: ListTodo,
-          submenus: []
-        },
-        {
-          href: "/dashboard/campanhas",
-          label: "Campanhas",
-          icon: TrendingUp,
-          submenus: []
-        }
+        // {
+        //   href: "/dashboard/consultorias",
+        //   label: "Consultorias",
+        //   icon: Handshake,
+        //   submenus: []
+        // },
+        // {
+        //   href: "/dashboard/projetos",
+        //   label: "Projetos",
+        //   icon: ListTodo,
+        //   submenus: []
+        // },
+        // {
+        //   href: "/dashboard/campanhas",
+        //   label: "Campanhas",
+        //   icon: TrendingUp,
+        //   submenus: []
+        // }
       ]
     },
     {
+      roles: ["teacher"],
       groupLabel: "Professor",
       menus: [
         {
@@ -86,11 +90,12 @@ export function getMenuList(): Group[] {
       ]
     },
     {
+      roles: ["admin", "teacher", "student"],
       groupLabel: "Administrativo",
       menus: [
         {
-          href: "/dashboard/minha-conta",
-          label: "Minha Conta",
+          href: "/dashboard/meu-perfil",
+          label: "Meu perfil",
           icon: Settings
         }
       ]

@@ -6,25 +6,27 @@ import { ColumnDef } from "@tanstack/react-table";
 import dayjs from "dayjs";
 import { List } from "lucide-react";
 import Link from "next/link";
-import { UpdateCourseForm } from "./forms/update-course";
+import { UpdateModuleForm } from "../forms/update-module";
 
 
-export type Course = {
+export type Module = {
   id: number;
+  course_id: number;
   name: string;
   description: string;
+  image: string | null;
   created_at: string;
   updated_at: string;
-};
+}
 
-export const columns: ColumnDef<Course>[] = [
+export const columns: ColumnDef<Module>[] = [
   {
     accessorKey: "name",
     header: "Nome",
   },
   {
     accessorKey: "description",
-    header: "Descrição",
+    header: "Descrição  ",
   },
   {
     accessorKey: "created_at",
@@ -35,12 +37,12 @@ export const columns: ColumnDef<Course>[] = [
     }
   },
   {
-    accessorKey: "modules",
-    header: "Módulos",
+    accessorKey: "lessons",
+    header: "Lições",
     cell: ({ row }) => {
       return (
-        <div className="flex items-center ">
-          <Link href={`/dashboard/cursos/${row.original.id}`}>
+        <div className="flex items-center">
+          <Link href={`/dashboard/cursos/${row.original.course_id}/modulos/${row.original.id}`}>
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -49,7 +51,7 @@ export const columns: ColumnDef<Course>[] = [
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  Editar módulos
+                  Editar lições
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -62,7 +64,7 @@ export const columns: ColumnDef<Course>[] = [
     accessorKey: "actions",
     header: "Editar",
     cell: ({ row }) => {
-      return <UpdateCourseForm course={row.original} />
+      return <UpdateModuleForm module={row.original}/>
     }
   },
 ];
