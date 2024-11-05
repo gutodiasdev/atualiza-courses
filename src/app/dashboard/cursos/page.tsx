@@ -21,7 +21,7 @@ import toast from "react-hot-toast";
 import { z } from "zod";
 
 const schema = z.object({
-  name: z.string({ message: "Nome do usuário é obrigatório" }),
+  name: z.string({ message: "Nome do curso é obrigatório" }),
   description: z.string({ message: "Descrição do curso é obrigatório" }),
   image: z.string({ message: "Imagem é obrigatório" })
 });

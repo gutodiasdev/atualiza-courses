@@ -4,13 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { api } from "@/lib/api";
 import { useUser } from "@/lib/auth";
-import passwordGenerator from "@/lib/security/passwordGenerator";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
-import { CheckCircle, CopyIcon, KeyRound, Pencil } from "lucide-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { CheckCircle, Pencil } from "lucide-react";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -30,23 +28,22 @@ type UpdateStudentFormInput = {
 };
 
 const schema = z.object({
-  name: z.string({ message: "Nome do usuário é obrigatório" }).optional(),
-  status: z.string({ message: "Nome do usuário é obrigatório" }).optional(),
+  name: z.string().optional(),
+  status: z.string().optional(),
   email: z.string().email("Você precisa inserir um email válido").optional(),
-  password: z.string({ message: "Senha é obrigatório" }).min(6, "A senha precisa ter no mínimo 6 caracteres").optional()
 });
 
 export function UpdateStudentForm({ student }: UpdateStudentFormInput) {
   const { user } = useUser();
   const [open, setOpen] = useState<boolean>(false);
+  const query = useQueryClient();
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
       name: student.name,
       email: student.email,
-      status: student.status,
-      password: ""
+      status: student.status
     }
   });
 
@@ -54,10 +51,11 @@ export function UpdateStudentForm({ student }: UpdateStudentFormInput) {
     mutationKey: ["add_student", user.id],
     mutationFn: async (values: z.infer<typeof schema>) => {
       const teacherId = Number(user.id);
-      await api.post("/user", { ...values, role: "student", teacher_id: teacherId }, { authorization: true });
+      await api.put(`/user/${student.id}`, { ...values, role: "student", teacher_id: teacherId }, { authorization: true });
     },
     onSuccess: () => {
-      toast.success("Aluno adicionado com sucesso!");
+      toast.success("Aluno atualizado com sucesso!");
+      query.invalidateQueries({ queryKey: ["students", user.id] })
       setOpen(false);
     },
     onError: (error: any) => {
@@ -65,14 +63,14 @@ export function UpdateStudentForm({ student }: UpdateStudentFormInput) {
     }
   });
 
-  const generatePassword = () => {
-    form.setValue("password", passwordGenerator());
-  };
+  // const generatePassword = () => {
+  //   form.setValue("password", passwordGenerator());
+  // };
 
-  const copyToClipboard = async () => {
-    if (form.getValues().password?.length === 0) return null;
-    await navigator.clipboard.writeText(form.getValues().password as string);
-  };
+  // const copyToClipboard = async () => {
+  //   if (form.getValues().password?.length === 0) return null;
+  //   await navigator.clipboard.writeText(form.getValues().password as string);
+  // };
 
   const onSubmit: SubmitHandler<z.infer<typeof schema>> = async (values) => {
     await mutation.mutateAsync(values);
@@ -137,7 +135,7 @@ export function UpdateStudentForm({ student }: UpdateStudentFormInput) {
                   </FormItem>
                 )}
               />
-              <div className="flex items-end gap-x-2">
+              {/* <div className="flex items-end gap-x-2">
                 <FormField
                   control={form.control}
                   name="password"
@@ -175,7 +173,7 @@ export function UpdateStudentForm({ student }: UpdateStudentFormInput) {
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
-              </div>
+              </div> */}
               <Button variant="outline" className="right-0" type="submit">
                 <CheckCircle />
                 Atualizar aluno

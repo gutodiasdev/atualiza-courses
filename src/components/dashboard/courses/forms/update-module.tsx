@@ -27,9 +27,9 @@ type UpdateModuleFormInput = {
 };
 
 const schema = z.object({
-  name: z.string({ message: "Nome do usuário é obrigatório" }).optional(),
-  description: z.string({ message: "Nome do usuário é obrigatório" }).optional(),
-  image: z.string({ message: "Nome do usuário é obrigatório" }).optional(),
+  name: z.string().optional(),
+  description: z.string().optional(),
+  image: z.string().optional(),
 });
 
 export function UpdateModuleForm({ module }: UpdateModuleFormInput) {
@@ -81,7 +81,7 @@ export function UpdateModuleForm({ module }: UpdateModuleFormInput) {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Nome do usuário</FormLabel>
+                    <FormLabel>Nome do módulo</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>

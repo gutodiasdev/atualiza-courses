@@ -17,14 +17,20 @@ export function ModulesTable(props: Props) {
   const getModules = async () => {
     const { data } = await api.get(`/courses/${props.courseId}/modules`, { authorization: true });
     return data;
-  }
+  };
 
   const query = useQuery({
     queryKey: ["course_modules", props.courseId, user.id],
     queryFn: getModules
   });
 
-  if (query.isLoading) return <LoaderIcon className="animate-spin"/>
+  if (query.isLoading) {
+    return (
+      <div className="border border-gray-900 rounded-md flex justify-center h-96 items-center">
+        <LoaderIcon className="animate-spin" />
+      </div>
+    );
+  }
 
   return <DataTable columns={columns} data={query.data} />;
 }

@@ -118,6 +118,19 @@ export function UpdateLessonForm({ lesson }: UpdateLessonFormInput) {
                   </FormItem>
                 )}
               />
+              <FormField
+                control={form.control}
+                name="video_thumb"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Thumb do vídeo</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <Button variant="outline" className="right-0" type="submit">
                 <CheckCircle />
                 Atualizar lição

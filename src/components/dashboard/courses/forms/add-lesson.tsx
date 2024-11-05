@@ -8,7 +8,8 @@ import { api } from "@/lib/api";
 import { useUser } from "@/lib/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { BookPlus, CheckCircle } from "lucide-react";
+import { ArrowLeft, BookPlus, CheckCircle } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -20,7 +21,7 @@ type Props = {
 };
 
 const schema = z.object({
-  name: z.string({ message: "Nome do usuário é obrigatório" }),
+  name: z.string({ message: "Nome da lição é obrigatório" }),
   description: z.string({ message: "Descrição do curso é obrigatório" }),
   video_url: z.string({ message: "Descrição do curso é obrigatório" }).optional()
 });
@@ -61,7 +62,12 @@ export function AddLessonForm(props: Props) {
 
   return (
     <section>
-      <section className="flex item-center justify-end gap-x-4">
+      <section className="flex item-center justify-between gap-x-4 py-4">
+        <Link href={`/dashboard/cursos/${props.courseId}`}>
+          <Button type="button" size="icon" variant="outline">
+            <ArrowLeft />
+          </Button>
+        </Link>
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
             <Button variant="outline">

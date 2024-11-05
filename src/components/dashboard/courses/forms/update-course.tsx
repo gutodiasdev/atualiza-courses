@@ -25,9 +25,9 @@ type UpdateCourseFormInput = {
 };
 
 const schema = z.object({
-  name: z.string({ message: "Nome do usuário é obrigatório" }).optional(),
-  description: z.string({ message: "Nome do usuário é obrigatório" }).optional(),
-  image: z.string({ message: "Nome do usuário é obrigatório" }).optional(),
+  name: z.string().optional(),
+  description: z.string().optional(),
+  image: z.string().optional(),
 });
 
 export function UpdateCourseForm({ course }: UpdateCourseFormInput) {
@@ -78,7 +78,7 @@ export function UpdateCourseForm({ course }: UpdateCourseFormInput) {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Nome do usuário</FormLabel>
+                    <FormLabel>Nome do curso</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
