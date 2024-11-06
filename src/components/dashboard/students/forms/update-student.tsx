@@ -54,8 +54,7 @@ export function UpdateStudentForm({ student }: UpdateStudentFormInput) {
   const mutation = useMutation({
     mutationKey: ["add_student", user.id],
     mutationFn: async (values: z.infer<typeof schema>) => {
-      const teacherId = Number(user.id);
-      await api.put(`/user/${student.id}`, { ...values, role: "student", teacher_id: teacherId }, { authorization: true });
+      await api.put(`/user/${student.id}`, { ...values, role: "student" }, { authorization: true });
     },
     onSuccess: () => {
       toast.success("Aluno atualizado com sucesso!");
