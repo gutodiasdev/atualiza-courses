@@ -24,8 +24,8 @@ type Course = {
 export default function Page() {
   const { user } = useUser();
 
-  const query = useQuery<Course[], AxiosError>({
-    queryKey: ["courses", user.id],
+  const query = useQuery<{ enrolled: Course[], not_enrolled: Course[]; }, AxiosError>({
+    queryKey: ["student_courses", user.id],
     queryFn: async () => {
       const { data } = await api.get("/student/courses", { authorization: true });
       return data;
@@ -41,8 +41,39 @@ export default function Page() {
             Cursos aceitos
           </h1>
         </div>
-        <div className="grid xl:grid-cols-4">
+        <div className="grid xl:grid-cols-4 gap-4 pt-6">
+          {
+            query.isFetching ? (
+              <div>
+                <p>123</p>
+              </div>
+            ) : query.isError ? (
+              <div>
+                <p>123</p>
+              </div>
+            ) : (
+              query.data?.enrolled.map((course: Course) => (
+                <Link key={course.id} href={`/dashboard/aulas/curso/${course.id}`}>
+                  <div className="border rounded-lg border-gray-700n overflow-hidden">
+                    <div className="relative w-auto h-48">
+                      <Image src={course.image} alt={course.name} fill />
+                    </div>
+                    <div className="p-4 space-y-4">
+                      <h2 className="text-lg font-semibold">
+                        {course.name}
+                      </h2>
+                      <p className="text-sm font-normal">
+                        {course.description}
+                      </p>
+                      <div className="flex gap-x-2 items-center">
 
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              ))
+            )
+          }
         </div>
       </section>
       <section className="pt-6">
@@ -62,7 +93,7 @@ export default function Page() {
                 <p>123</p>
               </div>
             ) : (
-              query.data?.map((course: Course) => (
+              query.data?.not_enrolled.map((course: Course) => (
                 <Link key={course.id} href={`/dashboard/aulas/curso/${course.id}`}>
                   <div className="border rounded-lg border-gray-700n overflow-hidden">
                     <div className="relative w-auto h-48">
@@ -72,16 +103,15 @@ export default function Page() {
                       <h2 className="text-lg font-semibold">
                         {course.name}
                       </h2>
-                      <p className="text-md font-normal">
+                      <p className="text-sm font-normal">
                         {course.description}
                       </p>
-                      <div className="flex gap-x-2 items-center">
-
+                      <div className="flex gap-x-2 items-center justify-end">
+                        <Button variant="outline" >
+                          <CheckCircle />
+                          Solicitar aprovação
+                        </Button>
                       </div>
-                      <Button variant="outline" >
-                        <CheckCircle />
-                        Solicitar aprovação
-                      </Button>
                     </div>
                   </div>
                 </Link>

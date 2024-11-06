@@ -8,13 +8,15 @@ import { api } from "@/lib/api";
 import { useUser } from "@/lib/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { CheckCircle, Pencil } from "lucide-react";
+import { CheckCircle, CopyIcon, KeyRound, Pencil } from "lucide-react";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
 import { STATUS } from "../columns";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import passwordGenerator from "@/lib/security/passwordGenerator";
 
 type UpdateStudentFormInput = {
   student: {
@@ -31,6 +33,7 @@ const schema = z.object({
   name: z.string().optional(),
   status: z.string().optional(),
   email: z.string().email("Você precisa inserir um email válido").optional(),
+  password: z.string().optional(),
 });
 
 export function UpdateStudentForm({ student }: UpdateStudentFormInput) {
@@ -43,7 +46,8 @@ export function UpdateStudentForm({ student }: UpdateStudentFormInput) {
     defaultValues: {
       name: student.name,
       email: student.email,
-      status: student.status
+      status: student.status,
+      password: ""
     }
   });
 
@@ -63,14 +67,14 @@ export function UpdateStudentForm({ student }: UpdateStudentFormInput) {
     }
   });
 
-  // const generatePassword = () => {
-  //   form.setValue("password", passwordGenerator());
-  // };
+  const generatePassword = () => {
+    form.setValue("password", passwordGenerator());
+  };
 
-  // const copyToClipboard = async () => {
-  //   if (form.getValues().password?.length === 0) return null;
-  //   await navigator.clipboard.writeText(form.getValues().password as string);
-  // };
+  const copyToClipboard = async () => {
+    if (form.getValues().password?.length === 0) return null;
+    await navigator.clipboard.writeText(form.getValues().password as string);
+  };
 
   const onSubmit: SubmitHandler<z.infer<typeof schema>> = async (values) => {
     await mutation.mutateAsync(values);
@@ -135,7 +139,7 @@ export function UpdateStudentForm({ student }: UpdateStudentFormInput) {
                   </FormItem>
                 )}
               />
-              {/* <div className="flex items-end gap-x-2">
+              <div className="flex items-end gap-x-2">
                 <FormField
                   control={form.control}
                   name="password"
@@ -173,7 +177,7 @@ export function UpdateStudentForm({ student }: UpdateStudentFormInput) {
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
-              </div> */}
+              </div>
               <Button variant="outline" className="right-0" type="submit">
                 <CheckCircle />
                 Atualizar aluno

@@ -1,13 +1,9 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Popover, PopoverTrigger } from "@/components/ui/popover";
-import { PopoverContent } from "@radix-ui/react-popover";
 import { ColumnDef } from "@tanstack/react-table";
 import dayjs from "dayjs";
-import { CheckCircle, CircleX } from "lucide-react";
 import { UpdateStudentForm } from "./forms/update-student";
+import { AcceptOrRejectStudentForm } from "./forms/accept-or-reject-student";
 
 
 export type Student = {
@@ -50,25 +46,7 @@ export const columns: ColumnDef<Student>[] = [
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => {
-      return (
-        <Popover>
-          <PopoverTrigger asChild>
-            <Badge className="rounded-full cursor-pointer" variant={row.original.status}>
-              {STATUS[row.original.status]}
-            </Badge>
-          </PopoverTrigger>
-          <PopoverContent className="z-50 mt-2 p-2 min-w-40 bg-gray-900 rounded-md border border-gray-800 space-x-4">
-            <Button variant="outline">
-              <CheckCircle />
-              Aprovar
-            </Button>
-            <Button variant="destructive">
-              <CircleX />
-              Rejeitar
-            </Button>
-          </PopoverContent>
-        </Popover>
-      );
+      return <AcceptOrRejectStudentForm currentStatus={row.original.status} studentId={row.original.id}/>
     }
   },
   {
