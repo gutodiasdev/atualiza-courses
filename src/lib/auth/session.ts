@@ -79,3 +79,7 @@ export async function getToken(): Promise<string | undefined> {
   const token = cookiesStorage.get("session")?.value;
   return token;
 }
+
+// export async function getParams(): Promise<Record<string, unknown>> {
+//   const {} = await 
+// }

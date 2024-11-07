@@ -38,7 +38,7 @@ export function AddLessonForm(props: Props) {
     },
     onSuccess: () => {
       toast.success("Módulo adicionado com sucesso!", { duration: 2000 });
-      queryClient.invalidateQueries({ queryKey: ["course_module_lessons", props.courseId, props.moduleId, user.id] });
+      queryClient.refetchQueries({ queryKey: ["course_module_lessons", { id: String(props.moduleId) }], exact: true });
       form.reset();
       setOpen(false);
     },

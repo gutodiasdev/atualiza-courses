@@ -20,7 +20,7 @@ type UpdateLessonFormInput = {
     course_module_id: number;
     name: string;
     video_url: string;
-    video_thumb: string| null;
+    video_thumb: string | null;
     description: string;
     created_at: string;
     updated_at: string;
@@ -56,7 +56,12 @@ export function UpdateLessonForm({ lesson }: UpdateLessonFormInput) {
     },
     onSuccess: () => {
       toast.success("Curso atualizado com sucesso");
-      query.invalidateQueries({ queryKey: ["course_module_lessons", lesson.course_module_id, user.id] })
+      query.invalidateQueries({
+        queryKey: ["course_module_lessons", {
+          id: String(lesson.course_module_id)
+        }],
+        exact: true
+      });
       setOpen(false);
     },
     onError: (error: any) => {

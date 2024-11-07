@@ -3,7 +3,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { columns } from "./columns";
 import { DataTable } from "./data-table";
-import { useUser } from "@/lib/auth";
 import { api } from "@/lib/api";
 import { LoaderIcon } from "lucide-react";
 
@@ -13,8 +12,6 @@ type Props = {
 };
 
 export function LessonsTable(props: Props) {
-  const { user } = useUser();
-
   const getModules = async () => {
     const { data } = await api.get(`/courses/${props.courseId}/modules/${props.moduleId}/lessons`, {
       authorization: true
@@ -23,7 +20,7 @@ export function LessonsTable(props: Props) {
   };
 
   const query = useQuery({
-    queryKey: ["course_module_lessons", props.moduleId, user.id],
+    queryKey: ["course_module_lessons", { id: props.moduleId }],
     queryFn: getModules
   });
 

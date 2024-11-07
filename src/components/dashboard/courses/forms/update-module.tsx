@@ -46,6 +46,7 @@ export function UpdateModuleForm({ module }: UpdateModuleFormInput) {
     }
   });
 
+
   const mutation = useMutation({
     mutationKey: ["update_course_module", module.id, user.id],
     mutationFn: async (values: z.infer<typeof schema>) => {
@@ -53,7 +54,8 @@ export function UpdateModuleForm({ module }: UpdateModuleFormInput) {
     },
     onSuccess: () => {
       toast.success("Curso atualizado com sucesso");
-      query.invalidateQueries({ queryKey: ["course_modules", module.course_id, user.id] })
+      query.refetchQueries({ queryKey: ["course_modules", { id: String(module.course_id) }], exact: true });
+      query.invalidateQueries({ queryKey: ["course", module.course_id, user.id] });
       setOpen(false);
     },
     onError: (error: any) => {

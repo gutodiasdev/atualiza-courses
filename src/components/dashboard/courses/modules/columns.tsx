@@ -17,7 +17,7 @@ export type Module = {
   image: string | null;
   created_at: string;
   updated_at: string;
-}
+};
 
 export const columns: ColumnDef<Module>[] = [
   {
@@ -64,7 +64,7 @@ export const columns: ColumnDef<Module>[] = [
     accessorKey: "actions",
     header: "Editar",
     cell: ({ row }) => {
-      return <UpdateModuleForm module={row.original}/>
+      return <UpdateModuleForm module={row.original} />;
     }
   },
 ];

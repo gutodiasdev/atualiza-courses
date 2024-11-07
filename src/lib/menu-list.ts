@@ -2,10 +2,7 @@ import {
   Users,
   Settings, LayoutGrid,
   LucideIcon,
-  GraduationCap,
-  // Handshake,
-  // ListTodo,
-  // TrendingUp
+  GraduationCap, HandIcon
 } from "lucide-react";
 
 type Submenu = {
@@ -31,7 +28,7 @@ type Group = {
 export function getMenuList(): Group[] {
   return [
     {
-      roles: ["admin"],
+      roles: ["admin", "student", "teacher"],
       groupLabel: "",
       menus: [
         {
@@ -86,6 +83,11 @@ export function getMenuList(): Group[] {
           href: "/dashboard/cursos",
           label: "Cursos",
           icon: GraduationCap
+        },
+        {
+          href: "/dashboard/solicitações",
+          label: "Solicitações",
+          icon: HandIcon
         }
       ]
     },
