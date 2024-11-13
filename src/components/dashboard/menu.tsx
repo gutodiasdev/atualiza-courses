@@ -30,9 +30,9 @@ export function Menu({ isOpen }: MenuProps) {
   return (
     <ScrollArea className="[&>div>div[style]]:!block">
       <nav className="mt-8 w-full">
-        <ul className="flex flex-col min-h-[calc(100vh-48px-36px-16px-32px)] lg:min-h-[calc(100vh-32px-40px-32px)] items-start space-y-1 px-2">
+        <ul className="flex flex-col justify-center min-h-[calc(100vh-48px-36px-16px-32px)] lg:min-h-[calc(100vh-32px-40px-32px)] space-y-1 px-2">
           {menuList
-            .filter((list) => list.roles.some((role) => user.roles.includes(role)))
+            .filter((list) => list.roles.some((role) => user?.roles.includes(role)))
             .map(({ groupLabel, menus }, index) => (
               <li className={cn("w-full", groupLabel ? "pt-5" : "")} key={index}>
                 {(isOpen && groupLabel) || isOpen === undefined ? (
@@ -118,13 +118,13 @@ export function Menu({ isOpen }: MenuProps) {
                 )}
               </li>
             ))}
-          <li className="w-full grow flex items-end">
+          <li className="w-full flex items-end">
             <TooltipProvider disableHoverableContent>
               <Tooltip delayDuration={100}>
                 <TooltipTrigger asChild>
                   <Button
                     onClick={signOut}
-                    variant="outline"
+                    variant="ghost"
                     className="w-full justify-center h-10 mt-5"
                   >
                     <span className={cn(isOpen === false ? "" : "mr-4")}>

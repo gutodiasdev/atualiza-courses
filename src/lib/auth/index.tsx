@@ -9,9 +9,19 @@ import {
 } from 'react';
 import { use } from 'react';
 
+type User = {
+  id: number;
+  name: string;
+  email: string;
+  roles:  string[];
+  avatar: string | null,
+  created_at:  string;
+  updated_at:  string;
+}
+
 type UserContextType = {
-  user: any | null;
-  setUser: (user: any | null) => void;
+  user: User | null;
+  setUser: (user: User | null) => void;
 };
 
 const UserContext = createContext<UserContextType | null>(null);
@@ -29,10 +39,10 @@ export function UserProvider({
   userPromise,
 }: {
   children: ReactNode;
-  userPromise: Promise<any | null>;
+  userPromise: Promise<User | null>;
 }) {
   const initialUser = use(userPromise);
-  const [user, setUser] = useState<any | null>(initialUser);
+  const [user, setUser] = useState<User | null>(initialUser);
 
   useEffect(() => {
     setUser(initialUser);

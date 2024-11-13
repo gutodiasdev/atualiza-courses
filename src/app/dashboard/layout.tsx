@@ -12,7 +12,7 @@ export default function Layout({
 }) {
   const sidebar = useStore(useSidebar, (x) => x);
   if (!sidebar) return null;
-  const { getOpenState, settings } = sidebar;
+  const { getOpenState, settings} = sidebar;
 
   return (
     <>

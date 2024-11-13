@@ -33,6 +33,8 @@
     "clsx": "^2.1.1",
     "cookies-next": "^4.3.0",
     "dayjs": "^1.11.13",
+    "embla-carousel-react": "^8.3.1",
+    "embla-carousel-wheel-gestures": "^8.0.1",
     "immer": "^10.1.1",
     "jimp": "^1.6.0",
     "jose": "^5.9.6",

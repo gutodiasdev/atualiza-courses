@@ -21,7 +21,7 @@ type Menu = {
 
 type Group = {
   roles: string[];
-  groupLabel: string;
+  groupLabel?: string;
   menus: Menu[];
 };
 
@@ -41,7 +41,7 @@ export function getMenuList(): Group[] {
     },
     {
       roles: ["student"],
-      groupLabel: "Alunos",
+      // groupLabel: "Alunos",
       menus: [
         {
           href: "/dashboard/aulas",
@@ -71,7 +71,7 @@ export function getMenuList(): Group[] {
     },
     {
       roles: ["teacher"],
-      groupLabel: "Professor",
+      // groupLabel: "Professor",
       menus: [
         {
           href: "/dashboard/alunos",
@@ -93,7 +93,7 @@ export function getMenuList(): Group[] {
     },
     {
       roles: ["admin", "teacher", "student"],
-      groupLabel: "Administrativo",
+      // groupLabel: "Administrativo",
       menus: [
         {
           href: "/dashboard/meu-perfil",

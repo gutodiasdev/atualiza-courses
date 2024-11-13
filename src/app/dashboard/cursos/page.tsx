@@ -3,6 +3,7 @@
 import { ContentLayout } from "@/components/dashboard/content-layout";
 import { columns } from "@/components/dashboard/courses/columns";
 import { DataTable } from "@/components/dashboard/courses/data-table";
+import { useUploadCourseImage } from "@/components/dashboard/courses/forms/upload-course-image";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -13,9 +14,10 @@ import { useUser } from "@/lib/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { CheckCircle, GraduationCap, LoaderCircle, RefreshCcw } from "lucide-react";
+import { CheckCircle, GraduationCap, LoaderCircle, RefreshCcw, X } from "lucide-react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
@@ -30,9 +32,13 @@ export default function Page() {
   const { user } = useUser();
   const router = useRouter();
   const [open, setOpen] = useState<boolean>(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | ArrayBuffer | null>(null);
+
+  const uploadCourseImageMutation = useUploadCourseImage();
 
   const query = useQuery<any, AxiosError>({
-    queryKey: ["courses", user.id],
+    queryKey: ["courses", user?.id],
     queryFn: async () => {
       const { data } = await api.get("/courses", {
         authorization: true
@@ -49,9 +55,17 @@ export default function Page() {
   }, [query]);
 
   const mutation = useMutation({
-    mutationKey: ["add_course", user.id],
+    mutationKey: ["add_course", user?.id],
     mutationFn: async (values: z.infer<typeof schema>) => {
-      await api.post("/courses", { ...values, teacher_id: user.id }, { authorization: true });
+      const { imageAwsURL } = await uploadCourseImageMutation.mutateAsync({
+        userId: user?.id as number,
+        image: imageFile as File
+      });
+      await api.post("/courses", {
+        ...values,
+        image: imageAwsURL,
+        teacher_id: user?.id
+      }, { authorization: true });
     },
     onSuccess: () => {
       toast.success("Curso adicionado com sucesso!", { duration: 2000 });
@@ -60,7 +74,6 @@ export default function Page() {
     },
     onError: (error: any) => {
       toast.error(error.message);
-
     }
   });
 
@@ -81,8 +94,30 @@ export default function Page() {
     query.refetch();
   };
 
+  const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+
+    if (file) {
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        setImageFile(file);
+        setImagePreview(reader.result);
+      };
+
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setImagePreview(null);
+    setImageFile(null);
+  };
+
+  console.log();
+
   return (
-    <ContentLayout title="Cursos">
+    <ContentLayout>
       <section className="flex item-center justify-end gap-x-4">
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
@@ -127,14 +162,34 @@ export default function Page() {
                     <FormItem>
                       <FormLabel>Imagem do curso</FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <div className="flex flex-col w-full max-w-sm gap-4 y-4 mb-4">
+                          {
+                            imagePreview ? (
+                              <>
+                                <p className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Imagem</p>
+                                <div className="relative w-full h-[400px] border">
+                                  <Button size="sm" className="rounded-full absolute z-20 -right-1 -top-1" variant="destructive" onClick={handleRemoveImage}>
+                                    <X size={12} />
+                                  </Button>
+                                  <Image src={imagePreview as string} alt="preview" fill objectFit="contain" />
+                                </div>
+                              </>
+                            ) : (
+                              <Input id="picture" type="file" {...field} onChange={handleImageChange} />
+                            )
+                          }
+                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                <Button variant="outline" className="right-0" type="submit">
-                  <CheckCircle />
+                <Button variant="outline" className="right-0" type="submit" disabled={uploadCourseImageMutation.isPending || mutation.isPending}>
+                  {
+                    (uploadCourseImageMutation.isPending || mutation.isPending) ? (
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-refresh-cw animate-spin"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" /><path d="M21 3v5h-5" /><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" /><path d="M8 16H3v5" /></svg>
+                    ) : <CheckCircle />
+                  }
                   Adicionar curso
                 </Button>
               </form>

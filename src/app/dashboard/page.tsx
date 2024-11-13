@@ -2,7 +2,7 @@ import { ContentLayout } from "@/components/dashboard/content-layout";
 
 export default function Page() {
   return (
-    <ContentLayout title="Dashboard">
+    <ContentLayout>
       <p>Dashboard page!</p>
     </ContentLayout>
   );

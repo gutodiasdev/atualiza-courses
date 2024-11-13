@@ -10,7 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, BookPlus, CheckCircle } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
@@ -28,15 +28,17 @@ export function AddModuleForm(props: Props) {
   const { user } = useUser();
   const queryClient = useQueryClient();
   const [open, setOpen] = useState<boolean>(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | ArrayBuffer | null>(null);
 
   const mutation = useMutation({
-    mutationKey: ["add_course", user.id],
+    mutationKey: ["add_course", user?.id],
     mutationFn: async (values: z.infer<typeof schema>) => {
       await api.post(`/courses/${props.courseId}/modules`, values, { authorization: true });
     },
     onSuccess: () => {
       toast.success("Módulo adicionado com sucesso!", { duration: 2000 });
-      queryClient.invalidateQueries({ queryKey: ["course_modules", props.courseId, user.id] });
+      queryClient.invalidateQueries({ queryKey: ["course_modules", props.courseId, user?.id] });
       form.reset();
       setOpen(false);
     },
@@ -55,6 +57,21 @@ export function AddModuleForm(props: Props) {
 
   const onSubmit: SubmitHandler<z.infer<typeof schema>> = async (values) => {
     await mutation.mutateAsync(values);
+  };
+
+  const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+
+    if (file) {
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        setImageFile(file);
+        setImagePreview(reader.result);
+      };
+
+      reader.readAsDataURL(file);
+    }
   };
 
   return (
