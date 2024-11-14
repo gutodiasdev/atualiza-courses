@@ -3,11 +3,11 @@
 import { api } from "@/lib/api";
 import { useUser } from "@/lib/auth";
 import { useQuery } from "@tanstack/react-query";
-import { Button } from "../ui/button";
-import { CheckCircle } from "lucide-react";
 import { AxiosError } from "axios";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion";
 import Image from "next/image";
+import { Button } from "../ui/button";
+import { CheckCircle } from "lucide-react";
 
 type Props = {
   courseId: string;
@@ -18,6 +18,7 @@ type Course = {
   name: string;
   description: string;
   image: string | null;
+  background_image: string | null;
   teacher_id: number;
   created_at: string;
   updated_at: string;
@@ -50,7 +51,7 @@ export default function SingleCourse(props: Props) {
   const { user } = useUser();
 
   const query = useQuery<Course, AxiosError>({
-    queryKey: ["course", props.courseId, user.id],
+    queryKey: ["course", props.courseId, user?.id],
     queryFn: async () => {
       const { data } = await api.get("/student/courses/" + props.courseId, { authorization: true });
       return data;
@@ -64,25 +65,39 @@ export default function SingleCourse(props: Props) {
   }
 
   return (
-    <div className="space-y-4">
-      <section className="flex item-center justify-end gap-x-4">
-        <Button variant="outline" >
-          <CheckCircle />
-          Solicitar aprovação
-        </Button>
-      </section>
+    <div className="space-y-4 -m-[32px]">
       <section className="space-y-4">
-        <div className="border border-gray-700 rounded-lg h-80 flex gap-x-8">
-          <div className="relative w-80 h-80">
-            <Image src={query.data?.image as string} alt={query.data?.name as string} fill />
+        <div className="relative rounded-lg h-full flex gap-x-8 backdrop-blur-3xl">
+          <div className="absolute w-full grid grid-cols-2 z-10">
+            <div className="text-white h-[600px] flex flex-col justify-center p-10 space-y-4">
+              <h2 className="text-5xl font-semibold">
+                {query.data?.name}
+              </h2>
+              <p>
+                {query.data?.description}
+              </p>
+              <section className="pt-8">
+                <Button variant="outline" size="lg">
+                  <CheckCircle />
+                  Solicitar aprovação
+                </Button>
+              </section>
+            </div>
+            <div>
+
+            </div>
           </div>
-          <div className="p-16 space-y-4">
-            <h2 className="text-2xl font-medium">
-              {query.data?.name}
-            </h2>
-            <p>
-              {query.data?.description}
-            </p>
+          <div className="relative w-full h-[600px] mx-auto overflow-hidden">
+            <div className="relative w-screen h-[600px] bg-gradient-to-t from-black via-black to-transparent">
+              <Image
+                src={query.data?.background_image as string}
+                alt={query.data?.name as string}
+                fill
+                layout="cover"
+                className=" bg-gradient-to-t from-black via-black to-transparent"
+              />
+            </div>
+            <div className="absolute inset-0 shadow-[inset_0_0_160px_rgba(0,0,0,0.95)] pointer-events-none"></div>
           </div>
         </div>
         <div className="p-6">

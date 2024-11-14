@@ -39,7 +39,7 @@ export function UserProvider({
   userPromise,
 }: {
   children: ReactNode;
-  userPromise: Promise<User | null>;
+  userPromise: Promise<any | null>;
 }) {
   const initialUser = use(userPromise);
   const [user, setUser] = useState<User | null>(initialUser);

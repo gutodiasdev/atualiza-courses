@@ -19,7 +19,7 @@ export default function Layout({
       <Sidebar />
       <main
         className={cn(
-          "min-h-screen bg-zinc-50 dark:bg-gray-900 transition-[margin-left] ease-in-out duration-300",
+          "min-h-screen bg-black dark:bg-black transition-[margin-left] ease-in-out duration-300",
           !settings.disabled && (!getOpenState() ? "lg:ml-[90px]" : "lg:ml-72")
         )}
       >
