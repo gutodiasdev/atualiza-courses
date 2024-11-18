@@ -4,47 +4,14 @@ import { api } from "@/lib/api";
 import { useUser } from "@/lib/auth";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import { CheckCircle } from "lucide-react";
+import { Course, Module } from "@/lib/@types";
+import { ModulesCarousel } from "../dashboard/modules-carousel";
 
 type Props = {
   courseId: string;
-};
-
-type Course = {
-  id: number;
-  name: string;
-  description: string;
-  image: string | null;
-  background_image: string | null;
-  teacher_id: number;
-  created_at: string;
-  updated_at: string;
-  course_modules: Module[];
-};
-
-type Module = {
-  id: number;
-  course_id: number;
-  name: string;
-  description: string;
-  image: string | null;
-  created_at: string;
-  updated_at: string;
-  course_module_lessons: Lesson[];
-};
-
-type Lesson = {
-  id: number;
-  course_module_id: number;
-  name: string;
-  description: string;
-  video_url: string;
-  video_thumb: string;
-  created_at: string;
-  updated_at: string;
 };
 
 export default function SingleCourse(props: Props) {
@@ -101,42 +68,7 @@ export default function SingleCourse(props: Props) {
           </div>
         </div>
         <div className="p-6">
-          <Accordion type="single" collapsible>
-            {
-              query.data?.course_modules.map((module) => (
-                <AccordionItem value={String(module.id)} key={module.id}>
-                  <AccordionTrigger>{module.name}</AccordionTrigger>
-                  <AccordionContent className="space-y-4">
-                    {module.description}
-                    <h3 className="mt-8 text-sm">
-                      Lições
-                    </h3>
-                    <ul className="px-8 list-disc">
-                      {
-                        module.course_module_lessons.map((lesson) => (
-                          <li key={lesson.id} className="list-item">
-                            {lesson.name}
-                          </li>
-                        ))
-                      }
-                    </ul>
-                    {/* <Accordion  type="single" collapsible className="px-8">
-                      {
-                        module.course_module_lessons.map((module) => (
-                          <AccordionItem value={String(module.id)} key={module.id}>
-                            <AccordionTrigger>{module.name}</AccordionTrigger>
-                            <AccordionContent>
-                              {module.description}
-                            </AccordionContent>
-                          </AccordionItem>
-                        ))
-                      }
-                    </Accordion> */}
-                  </AccordionContent>
-                </AccordionItem>
-              ))
-            }
-          </Accordion>
+          <ModulesCarousel modules={query.data?.course_modules as Module[]}/>
         </div>
       </section>
     </div>

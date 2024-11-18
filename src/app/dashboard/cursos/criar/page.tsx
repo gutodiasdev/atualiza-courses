@@ -1,7 +1,7 @@
 "use client";
 
 import { ContentLayout } from "@/components/dashboard/content-layout";
-import { useUploadCourseImage } from "@/components/dashboard/courses/forms/upload-course-image";
+import { useAWSUploadImage } from "@/components/dashboard/courses/forms/upload-course-image";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -23,7 +23,6 @@ const schema = z.object({
   background_image: z.string().optional(),
 });
 
-
 export default function Page() {
   const { user } = useUser();
   const query = useQueryClient();
@@ -33,7 +32,7 @@ export default function Page() {
   const [backgroundImageFile, setBackgroundImageFile] = useState<File | null>(null);
   const [backgroundImagePreview, setBackgroundImagePreview] = useState<string | ArrayBuffer | null>(null);
 
-  const uploadCourseImageMutation = useUploadCourseImage();
+  const uploadCourseImageMutation = useAWSUploadImage();
 
   const mutation = useMutation({
     mutationKey: ["add_course", user?.id],

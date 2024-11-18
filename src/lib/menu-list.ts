@@ -1,8 +1,8 @@
 import {
   Users,
-  Settings, LayoutGrid,
-  LucideIcon,
-  GraduationCap, HandIcon
+  Settings, LucideIcon,
+  GraduationCap, HandIcon,
+  Home
 } from "lucide-react";
 
 type Submenu = {
@@ -34,7 +34,7 @@ export function getMenuList(): Group[] {
         {
           href: "/dashboard",
           label: "Dashboard",
-          icon: LayoutGrid,
+          icon: Home,
           submenus: []
         }
       ]

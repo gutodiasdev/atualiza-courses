@@ -6,7 +6,7 @@ export default async function Page(props: { params: Promise<{ id: string; }>; })
   const params = await props.params;
 
   return (
-    <ContentLayout title="Módulos do curso">
+    <ContentLayout>
       <div className="space-y-4">
         <AddModuleForm courseId={params.id} />
         <ModulesTable courseId={params.id} />

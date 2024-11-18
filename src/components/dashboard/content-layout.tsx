@@ -6,7 +6,7 @@ interface ContentLayoutProps {
 export function ContentLayout({ children }: ContentLayoutProps) {
   return (
     <main>
-      <div className="w-full py-8 px-4 sm:px-8 dark:bg-black h-screen">
+      <div className="w-full py-8 px-4 sm:px-8 dark:bg-black h-full">
         {children}
       </div>
     </main>
