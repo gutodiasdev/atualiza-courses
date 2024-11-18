@@ -27,11 +27,11 @@ export function Menu({ isOpen }: MenuProps) {
   const menuList = getMenuList();
 
   return (
-    <nav className="absolute left-0 top-0 bottom-0 w-[90px] flex flex-col items-center justify-center gap-8 z-20">
+    <nav className="fixed left-0 top-0 bottom-0 w-[90px] flex flex-col items-center justify-center gap-8 z-20">
       <ul>
         {menuList
           .filter((list) => list.roles.some((role) => user?.roles.includes(role)))
-          .map(({ groupLabel, menus }, index) => (
+          .map(({ menus }, index) => (
             <li key={index}>
               {menus.map(
                 ({ href, label, icon: Icon, active, submenus }, index) =>

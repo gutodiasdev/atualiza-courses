@@ -30,7 +30,7 @@ export default function Page() {
   const [open, setOpen] = useState<boolean>(false);
 
   const query = useQuery({
-    queryKey: ["students", user.id],
+    queryKey: ["students", user?.id],
     queryFn: async () => {
       const { data } = await api.get("/clientes/student", {
         authorization: true
@@ -41,9 +41,9 @@ export default function Page() {
   });
 
   const mutation = useMutation({
-    mutationKey: ["add_student", user.id],
+    mutationKey: ["add_student", user?.id],
     mutationFn: async (values: z.infer<typeof schema>) => {
-      const teacherId = Number(user.id);
+      const teacherId = Number(user?.id);
       await api.post("/user", { ...values, role: "student", teacher_id: teacherId }, { authorization: true });
     },
     onSuccess: () => {
@@ -83,7 +83,7 @@ export default function Page() {
   };
 
   return (
-    <ContentLayout title="Alunos">
+    <ContentLayout>
       <section className="flex item-center justify-end gap-x-4">
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>

@@ -6,9 +6,10 @@ import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import Image from "next/image";
 import { Button } from "../ui/button";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, MoveLeft } from "lucide-react";
 import { Course, Module } from "@/lib/@types";
 import { ModulesCarousel } from "../dashboard/modules-carousel";
+import Link from "next/link";
 
 type Props = {
   courseId: string;
@@ -37,6 +38,11 @@ export default function SingleCourse(props: Props) {
         <div className="relative rounded-lg h-full flex gap-x-8 backdrop-blur-3xl">
           <div className="absolute w-full grid grid-cols-2 z-10">
             <div className="text-white h-[600px] flex flex-col justify-center p-10 space-y-4">
+              <Link href={`/dashboard/aulas`}>
+                <Button variant="outline" className="rounded-full mb-8" size="icon">
+                  <MoveLeft />
+                </Button>
+              </Link>
               <h2 className="text-5xl font-semibold">
                 {query.data?.name}
               </h2>
@@ -68,7 +74,7 @@ export default function SingleCourse(props: Props) {
           </div>
         </div>
         <div className="p-6">
-          <ModulesCarousel modules={query.data?.course_modules as Module[]}/>
+          <ModulesCarousel modules={query.data?.course_modules as Module[]} />
         </div>
       </section>
     </div>
