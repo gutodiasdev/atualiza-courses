@@ -20,8 +20,7 @@ type Course = {
 
 export default function Page() {
   const { user } = useUser();
-
-  const query = useQuery<{ enrolled: Course[], not_enrolled: Course[]; }, AxiosError>({
+  const query = useQuery<{ enrolled: Course[], not_enrolled: Course[]; pending_requests: Course[]; }, AxiosError>({
     queryKey: ["student_courses", user?.id],
     queryFn: async () => {
       const { data } = await api.get("/student/courses", { authorization: true });
@@ -48,6 +47,16 @@ export default function Page() {
         </div>
         <div className="flex w-full">
           <CoursesCarousel courses={query.data?.enrolled as Course[]} />
+        </div>
+      </section>
+      <section>
+        <div className="flex w-full pb-2">
+          <h2 className="text-sm font-semibold uppercase">
+            Solicitações pendentes
+          </h2>
+        </div>
+        <div className="flex w-full">
+          <CoursesCarousel courses={query.data?.pending_requests as Course[]} />
         </div>
       </section>
       <section>

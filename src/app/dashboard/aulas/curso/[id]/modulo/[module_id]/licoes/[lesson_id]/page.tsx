@@ -6,7 +6,7 @@ import { api } from "@/lib/api";
 import { useUser } from "@/lib/auth";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { MoveLeft } from "lucide-react";
+import { Loader, MoveLeft } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import ReactPlayer from "react-player/lazy";
@@ -25,7 +25,29 @@ export default function Page() {
 
   if (query.isLoading) {
     return (
-      <p>is loading...</p>
+      <div className="absolute top-0 left-0 w-screen h-screen z-40 bg-black grid place-content-center text-centter">
+        <div className="animate-spin">
+          <Loader />
+        </div>
+      </div>
+    );
+  }
+
+  if (query.isError && query.error.status === 403) {
+    return (
+      <div className="absolute top-0 left-0 w-screen h-screen z-40 bg-black grid place-content-center text-center gap-y-4">
+        <h1 className="text-lg font-semibold">
+          Você precisa ser aceito no curso para poder assistir aos seus módulos
+        </h1>
+        <div className="flex justify-center">
+          <Link href={`/dashboard/aulas/curso/${params.id}`}>
+            <Button variant="outline">
+              <MoveLeft />
+              Ir para página do curso
+            </Button>
+          </Link>
+        </div>
+      </div>
     );
   }
 

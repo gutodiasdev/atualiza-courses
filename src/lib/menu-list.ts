@@ -85,7 +85,7 @@ export function getMenuList(): Group[] {
           icon: GraduationCap
         },
         {
-          href: "/dashboard/solicitações",
+          href: "/dashboard/solicitacoes",
           label: "Solicitações",
           icon: HandIcon
         }
