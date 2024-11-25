@@ -52,13 +52,13 @@ export function UpdateStudentForm({ student }: UpdateStudentFormInput) {
   });
 
   const mutation = useMutation({
-    mutationKey: ["add_student", user.id],
+    mutationKey: ["add_student", user?.id],
     mutationFn: async (values: z.infer<typeof schema>) => {
       await api.put(`/user/${student.id}`, { ...values, role: "student" }, { authorization: true });
     },
     onSuccess: () => {
       toast.success("Aluno atualizado com sucesso!");
-      query.invalidateQueries({ queryKey: ["students", user.id] })
+      query.invalidateQueries({ queryKey: ["students", user?.id] })
       setOpen(false);
     },
     onError: (error: any) => {

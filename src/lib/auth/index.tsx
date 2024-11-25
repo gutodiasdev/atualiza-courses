@@ -13,6 +13,8 @@ type User = {
   id: number;
   name: string;
   email: string;
+  bio: string;
+  uniqueIdentifier: string;
   roles:  string[];
   avatar: string | null,
   created_at:  string;
