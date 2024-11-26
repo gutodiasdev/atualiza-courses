@@ -64,3 +64,11 @@ export type EnrollmentRequest = {
     updated_at: string;
   };
 };
+
+export type Mentor = {
+  avatar: string;
+  bio: string;
+  unique_identifier: string | null;
+  name: string;
+  id: number;
+};

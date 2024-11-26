@@ -1,7 +1,9 @@
 import {
   Users,
-  Settings, LucideIcon,
-  GraduationCap, HandIcon,
+  Settings,
+  LucideIcon,
+  GraduationCap,
+  HandIcon,
   Home
 } from "lucide-react";
 
@@ -47,6 +49,12 @@ export function getMenuList(): Group[] {
           href: "/dashboard/aulas",
           label: "Aulas",
           icon: GraduationCap,
+          submenus: []
+        },
+        {
+          href: "/dashboard/mentores",
+          label: "Mentores",
+          icon: Users,
           submenus: []
         },
         // {
