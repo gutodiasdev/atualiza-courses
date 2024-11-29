@@ -37,11 +37,6 @@ export function CoursesCarousel(props: Props) {
                 <CarouselItem key={index} className="pl-4 basis-[80%] md:basis-1/2 lg:basis-[18%]">
                   <Link key={course.id} href={`/dashboard/aulas/curso/${course.id}`}>
                     <div className="rounded-sm overflow-hidden h-[400px] relative hover:scale-105 transition-all ease-linear">
-                      <div className="p-4 space-y-4 absolute z-20 w-full bottom-0 text-center bg-gradient-to-t from-black via-black to-transparent min-h-20">
-                        <h2 className="text-lg font-semibold">
-                          {course.name}
-                        </h2>
-                      </div>
                       <div className="relative w-auto h-[100%]">
                         <Image src={course.image as string} alt={course.name} fill style={{ objectFit: "cover" }} />
                       </div>
